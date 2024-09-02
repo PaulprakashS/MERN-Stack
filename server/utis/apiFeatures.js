@@ -1,4 +1,4 @@
-const { json } = require("express");
+// const { json } = require("express");
 
 class APIFeatures {
     constructor (query ,queryStr){     //it is connected to the getProducts function in productController.js
@@ -7,9 +7,9 @@ class APIFeatures {
     }
     search() {
       let keyword =  this.queryStr.keyword ? {
-        name :{
-            $regex:this.queryStr.keyword,
-            $options : 'i'
+        name :{                                //regex - regular expression
+            $regex:this.queryStr.keyword,      //$regex: this.queryStr.keyword would create a regex pattern equivalent to /apple/
+            $options : 'i'                      //this.queryStr.keyword contains 'apple', the resulting regex pattern would be /apple/i, and it would match documents with the 'name' field containing 'apple', 'Apple', 'aPpLe', etc., in any case.
         }
       }: {};
 

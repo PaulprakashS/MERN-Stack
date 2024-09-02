@@ -35,17 +35,17 @@ const userSchema = new mongoose.Schema({
         default:Date.now
     }
 })
-userSchema.pre('save' , async function(next){ 
+userSchema.pre('save' , async function(next){       //(.pre save)This middleware function is designed to run before saving a user document to the database.
          //if this middleware didnt have to work sometimes like when just get the respons so we need to use 'next'  
-   if (!this.isModified('password')){
-    next();
+   if (!this.isModified('password')){  // This is an optimization to avoid unnecessarily hashing the password when it hasn't changed.
+    next();      //ithu password modify aagirukkanu paakuthu modify agirundhichina atha hash pannum illa next call pannivitrum ithu password change panuum bothu use aagum
    }
-    this.password = await bcrypt.hash(this.password ,10);
+    this.password = await bcrypt.hash(this.password ,10); //this method runs when we call .save() while creating or updating the document
 })
 
 userSchema.methods.getJwtToken = function(){
-   return jwt.sign({id:this.id} , process.env.JWT_SECRET , {
-        expiresIn:process.env.JWT_EXPIRES_TIME                              //sign(payload,secretkey,options)
+   return jwt.sign({id:this.id} , process.env.JWT_SECRET , {  //sign(payload,secretkey,options)
+        expiresIn:process.env.JWT_EXPIRES_TIME                             
     })
 }
 

@@ -5,7 +5,7 @@ const connectDatabase = require('./config/database');
 
 connectDatabase();
 
-const server = app.listen(process.env.PORT, (req,res) =>{
+const server = app.listen(process.env.X_ZOHO_CATALYST_LISTEN_PORT || 4000, (req,res) =>{
     console.log(`SERVER IS LISTENING AT http://localhost:${process.env.PORT} in ${process.env.NODE_ENV}`)
     
 })

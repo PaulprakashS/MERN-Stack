@@ -4,34 +4,65 @@ const sendEmail = require('../utis/email');
 const ErrorHandler = require('../utis/errorHandler');
 const sendToken = require('../utis/jwt');
 const crypto = require('crypto');
+
+
+
 //Register User api -/api/v1/register
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-  const { name, email, password } = req.body;
-console.log("register request got from backend");
-
-
-  let avatar;
-
-  let BASE_URL = process.env.BACKEND_URL;
-if(process.env.NODE_ENV ==='production'){
-  BASE_URL = `${req.protocol}://${req.get('host')}`
+  // const { name, email, password } = req.body;
+  console.log("Register request received from the backend");
+console.log("Request body:",req.body);
+let newUserData = {
+  name:req.body.name,
+  email:req.body.email,
+  password:req.body.password,
+  avatar: req.body.avatars[0].avatar
 }
-console.log("2")
-  if(req.file){
-    avatar = `${BASE_URL}/uploads/user/${req.file.originalname}`
+console.log("REQ.file:" , req.file);
+let avatar;
+let BASE_URL = process.env.BACKEND_URL;
+if(process.env.NODE_ENV ==='production'){
+    BASE_URL = `${req.protocol}://${req.get('host')}`
+}
+if(req.file){
+  avatar = `${BASE_URL}/uploads/user/${req.file.originalname}`
+  newUserData ={...newUserData,avatar}
+}
+try{
+console.log("NEW:",newUserData);
+    const user = await User.create(
+      // name :newUserData.name,
+      // email:newUserData.email,
+      // password:newUserData.password,
+      // avatar:newUserData.avatar
+      newUserData
+);
+
+   
+
+    console.log("User registered:", user);
+
+    // Assuming sendToken is defined and sends a token response
+    sendToken(user, 201, res);
+  } catch (error) {
+    console.error("Error registering user:", error);
+
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists. Please use a different email."
+      });
+    }
+
+    // Handle the error and send an appropriate response to the client
+    return res.status(500).json({
+      success: false,
+      message: "Error registering user"
+    });
   }
-  console.log("3")
+});
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    avatar
-  });
-  console.log("registered")
-  sendToken(user, 201, res);
-
-})
 //Login User api- api/v1/auth/login
 exports.loginUser = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;

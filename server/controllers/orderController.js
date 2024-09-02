@@ -23,7 +23,7 @@ console.log("Orderget");
         totalPrice,
         paymentInfo,
         paidAt:Date.now(),
-        user:req.user.id,
+        user:req.user.id, //we set req.user.id to user that is in model to identify who orders the item
     });
     console.log("Ordered");
     res.status(200).json({
@@ -47,7 +47,7 @@ exports.getSingleOrder = catchAsyncError(async(req,res,next)=>{
 
 //Get Loggedin user orders - api/v1/myorders
 exports.myOrders = catchAsyncError(async(req,res,next)=>{
-    const orders = await Order.find({user:req.user.id});     //we get req.id from isAuthenticated
+    const orders = await Order.find({user:req.user.id});     //we get req.user.id from isAuthenticated
     if(!orders){
      return next(new ErrorHandler(`Order not found with this id: ${req.params.id}`) ,404);
     }

@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.route('/login').post(loginUser); // Use '/login' route for login
 router.route('/logout').get(logoutUser); 
-router.route('/register').post(registerUser); 
+router.route('/register').post(registerUser,upload.single('avatar')); 
 router.route('/password/forgot').post(forgetPassword); 
 router.route('/password/reset/:token').post(resetPassword); 
 router.route('/myprofile').get(isAuntenticatedUser , getUserProfile); 

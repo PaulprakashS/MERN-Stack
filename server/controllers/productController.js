@@ -5,9 +5,9 @@ const APIFeatures = require('../utis/apiFeatures')
 //Get product - /api/v1/product
 exports.getProducts = catchAsyncError(async (req,res,next) =>{
   try {
-    const resPerPage = "4"; // Define your responsePerPage value
+    const resPerPage = "5"; // Define your responsePerPage value
     
-    let buildQuery = () =>{
+    let buildQuery = () =>{  //  query ,      queryStr
       return new APIFeatures(Product.find(), req.query).search().filter();
     }
 

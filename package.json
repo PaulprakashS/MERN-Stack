@@ -8,8 +8,8 @@
     "dev": "set NODE_ENV=development&& nodemon server/server.js",
     "prod": "set NODE_ENV=production&& nodemon server/server.js",
     "seeder": "node server/utis/seeder.js"
-
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
